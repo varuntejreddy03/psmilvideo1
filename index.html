@@ -1,192 +1,637 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MedRAG Milestone-1 Video</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --primary-bg: #112233;
+      --card-bg: rgba(255,255,255,0.10);
+      --card-shadow: 0 10px 30px #1ebbe677;
+      --btn-color: #7d5afe;
+      --btn-hover: #1ebbe6;
+      --text-light: #f6fbff;
+      --text-yel: #f8e377;
+      --accent: #1ebbe6;
+    }
+    [data-theme="light"] {
+      --primary-bg: #f4f7fa;
+      --card-bg: #fff;
+      --text-light: #1a2333;
+      --btn-color: #6a53e6;
+      --btn-hover: #14a3d1;
+      --text-yel: #e0b821;
+      --card-shadow: 0 10px 30px #dde8ff55;
+    }
     body {
-      background: #112233;
+      background: var(--primary-bg);
       min-height: 100vh;
       font-family: 'Poppins',sans-serif;
-      margin: 0; display: flex; align-items: center; justify-content: center;
+      margin: 0; display: flex; align-items: center; justify-content: center; flex-direction:column;
+      transition: background 0.3s;
+    }
+    .loader-container {
+      position:fixed;left:0;top:0;width:100vw;height:100vh;background:rgba(17,34,51,0.98);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 0.4s;
+    }
+    .loader-text {
+      color:#fff;font-size:2rem;letter-spacing:2px;font-weight:600;
+      animation: spin 1.9s linear infinite alternate;
+    }
+    @keyframes spin {
+      0% { letter-spacing: 2px;}
+      40% { letter-spacing: 13px;}
+      70% { color: #1ebbe6;}
+      100% { letter-spacing: 2px;}
     }
     .video-card { 
       margin: 3vw auto; max-width: 750px; width: 98vw;
-      background: rgba(255,255,255,0.10); border-radius: 28px; box-shadow: 0 10px 30px #1ebbe677;
+      background: var(--card-bg); border-radius: 28px; box-shadow: var(--card-shadow);
       padding: 44px 35px 36px 35px; position: relative; 
       backdrop-filter: blur(8px); text-align: center;
+      transition: background 0.3s, color 0.3s;
     }
-    h1 { font-size: 2rem; margin-bottom: 18px; color: #f6fbff; }
+    .theme-toggle {position:absolute;top:22px;right:22px;background:var(--btn-color);color:#fff;
+      border:none;border-radius:6px;font-size:17px;padding:7px 18px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px #7d5afe55;transition:background 0.17s;}
+    .theme-toggle:hover {background:var(--btn-hover);}
+    h1 { font-size: 2rem; margin-bottom: 18px; color: var(--text-light); }
     .video-area { margin: 0 auto 16px auto; width: 100%; display: flex; justify-content: center; }
-    .video-wrapper { position: relative; width: 95%; max-width: 620px; }
+    .video-wrapper { position: relative; width: 95%; max-width: 620px; height: 370px; }
+    #mainvideo { width: 100%; height: 100%; }
     iframe { width: 100%; min-height: 370px; border-radius: 18px; border: none; }
     .btn, .ppt-link, .transcript-btn {
-      background: #7d5afe;
-      color: #fff; 
-      border: none; 
-      border-radius: 6px; 
-      font-size: 17px; 
-      font-weight: 600;
-      padding: 11px 24px; 
-      letter-spacing: 0.7px; 
-      margin: 0 8px 11px 8px; 
-      cursor: pointer; 
+      background: var(--btn-color);
+      color: #fff; border: none; border-radius: 6px; font-size: 17px; font-weight: 600;
+      padding: 11px 24px; letter-spacing: 0.7px; margin: 0 8px 11px 8px; cursor: pointer; 
       box-shadow:0 2px 8px #7d5afe88;
       transition: background 0.2s, transform 0.2s;
-      display: inline-block;
-      text-decoration: none;
+      display: inline-block; text-decoration: none;
     }
-    .btn:hover, .ppt-link:hover, .transcript-btn:hover { background: #1ebbe6; transform: scale(1.04); }
-    .ppt-link::before {
-      content: "📑 ";
-      font-size: 1.14em;
-      vertical-align: middle;
-    }
-    .footer { margin-top: 20px; color: #f8e377; font-size: 15px; }
-    
-    /* Transcript area */
+    .btn:hover, .ppt-link:hover, .transcript-btn:hover { background: var(--btn-hover); transform: scale(1.04);}
+    .ppt-link::before { content: "📑 "; font-size: 1.14em; vertical-align: middle;}
+    .footer { margin-top: 20px; color: var(--text-yel); font-size: 15px; }
     .transcript-box {
-      display: none;
-      text-align: left;
-      margin-top: 20px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 12px;
-      padding: 16px;
-      color: #e6f0ff;
-      font-size: 15px;
-      line-height: 1.6;
-      max-height: 340px;
-      overflow-y: auto;
-      white-space: pre-line;
+      display: none; text-align: left; margin-top: 20px;
+      background: rgba(255,255,255,0.07); border-radius: 12px;
+      padding: 16px; color: #e6f0ff; font-size: 15px; line-height: 1.6; max-height: 340px;
+      overflow-y: auto; white-space: pre-line;
+      position: relative;
     }
-    
-    /* Modal overlay for popup video */
+    .transcript-line {
+      padding: 6px 0;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .transcript-line.active {
+      background: rgba(30, 187, 230, 0.25);
+      color: white;
+      font-weight: 600;
+    }
     .modal { display:none; position: fixed; z-index:24; left:0;top:0; width:100vw;height:100vh;
       background:rgba(24,29,44,0.85);align-items:center;justify-content:center;}
     .modal-inner { background:#191f39; border-radius:22px; padding:22px; box-shadow:0 5px 41px #1ebbe677;
       max-width:680px; width:95vw;}
     .modal iframe { width:100%; min-height:420px; border-radius:9px; }
     .modal-close { position:absolute;top:18px;right:26px; font-size:1.8em;color:#fff;cursor:pointer; }
+    .summary-card {margin:26px 0; background:rgba(255,255,255,0.13);border-radius:18px;padding:18px 21px; text-align:left;color:#fff;box-shadow:0 4px 16px #1ebbe677;}
+    .summary-header {font-weight:700;display:flex;align-items:center; cursor:pointer;user-select:none;}
+    .summary-header .toggle-icon{margin-left:auto;font-size:1.25em;}
+    .summary-content {display:none;padding-top:12px;}
+    .timeline {margin:30px 0 35px 0; padding:0;}
+    .timeline-event {display:flex;align-items:flex-start;margin-bottom:15px;}
+    .timeline-dot {width:18px; height:18px; background:var(--accent); border-radius:50%;margin-right:17px;margin-top:3px;}
+    .timeline-desc {background:rgba(255,255,255,0.08); border-radius:8px; padding:9px 18px; color:#fff;}
+    .timeline-title {font-weight:600;}
+    .timeline-expand {margin-left:8px;font-size:0.97em;color:var(--accent);cursor:pointer;}
+    .event-details {display:none; font-size:15px; margin-top:5px;}
+    .poll-box { margin:30px auto 15px auto;padding:20px 18px;background:rgba(255,255,255,0.09);border-radius:16px;text-align:left;max-width:700px;color:#f8e377;}
+    .poll-q {font-weight:600; color:#f8e377; font-size:1rem;}
+    .poll-opt {background:none;color:#fff;font-size:1em;padding:7px 8px;margin:6px 0;border: 1px solid #1ebbe6;border-radius:4px;cursor:pointer;}
+    .poll-opt.selected {background:var(--accent);color:#fff;font-weight:600;}
+    .poll-result {margin-top:8px;}
+    .team-section {margin:35px 0 10px 0;text-align:center;}
+    .team-title {font-size:1.15em;font-weight:700;letter-spacing:0.2px;color:var(--text-light);margin-bottom:9px;}
+    .team-subbox {font-size:0.99em; color:#9ed7f7;margin-bottom:13px;}
+    .team-row {display:flex;flex-wrap:wrap;justify-content:center;}
+    .team-member {background:rgba(255,255,255,0.08);border-radius:15px;padding:15px 18px;margin:8px 12px;text-align:center;width:170px;transition:box-shadow 0.19s;}
+    .team-member:hover{box-shadow:0 3px 22px #7d5afe72;}
+    .team-avatar {font-size:2.7em;}
+    .team-role {font-weight:600;color:#1ebbe6;margin-top:7px;}
+    .team-name {font-size:1.01em;margin-bottom:3px;margin-top:8px;color:var(--text-light);}
+    .chat-bubble-btn {position:fixed;bottom:40px;right:36px;background:#7d5afe;color:#fff;border:none;border-radius:100px;font-size:22px;width:58px;height:58px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 18px #6a13fd99;z-index:50;}
+    .chat-bubble-window {position:fixed;right:108px;bottom:68px;background:#191f39;color:#fff;padding:21px 25px;border-radius:18px;box-shadow:0 3px 21px #1ebbe677;max-width:330px;z-index:51;display:none;}
+    .counter-row {display:flex;justify-content:center;gap:40px;margin:25px 0 17px 0;}
+    .counter-box {background:rgba(255,255,255,0.10);border-radius:12px;padding:18px 16px;min-width:140px;}
+    .counter-num {font-size:1.5em;font-weight:700;color:#1ebbe6;}
+    .counter-label {margin-top:4px;font-size:1em;}
+    .faq-section {max-width:650px;margin:16px auto 18px auto;}
+    .faq-title {font-size: 1.08em; font-weight:700; color:var(--text-light);}
+    .faq-accordion {margin-top:10px;}
+    .faq-item {background:rgba(255,255,255,0.11);margin-bottom:9px;border-radius:9px;}
+    .faq-q {padding:13px 16px;font-weight:600;cursor:pointer;color:#fff;display:flex;justify-content:space-between;}
+    .faq-a {padding:12px 17px 13px 28px;display:none;color:#e9ebfd;}
+    .funfact-box {background:rgba(255,255,255,0.14);border-radius:15px;padding:11px 20px;font-size:1.13em;color:#20e4ff;font-weight:600;max-width:520px;margin:18px auto 8px auto;box-shadow:0 2px 9px #1ebbe66a;text-align:center;}
+    .progressbar-wrap {width:95%;max-width:536px;margin:14px auto 15px auto;}
+    .progressbar-label {color:#ffe883;margin-bottom:5px;font-size:0.98em;}
+    .progressbar-bar {width:100%;height:13px;background:#202c44;border-radius:9px;overflow:hidden;}
+    .progressbar-inner {height:100%;background:linear-gradient(90deg,#7d5afe 70%,#1ebbe6 100%);transition:width 1.1s;text-align:right;color:#fff;font-weight:600;font-size:0.98em;padding-right:7px;}
+    .testimonial-box {background:rgba(255,255,255,0.12);border-radius:14px;padding:13px 16px;max-width:510px;margin:18px auto 12px auto;position:relative;min-height:50px;}
+    .testimonial-quote {font-style:italic;color:#ddeeff;font-size:1.09em;margin-bottom:3px;}
+    .testimonial-author {margin-top:6px;font-size:0.99em;color:#ffe883;font-weight:600;}
+    .testimonial-nav {position:absolute;right:12px;bottom:12px;}
+    .testimonial-btn {background:none;border:none;color:#7d5afe;font-size:1.35em;cursor:pointer;margin:0 6px;}
+    .testimonial-btn:hover{color:#1ebbe6;}
+    .gloss-section {margin:30px auto 18px auto;max-width:600px;}
+    .gloss-title {font-weight:700;font-size:1.1em;color:#1ebbe6;margin-bottom:9px;}
+    .gloss-list {background:rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;}
+    .gloss-item {margin-bottom:8px;}
+    .gloss-term {font-weight:700;color:#f2f544;font-size:1em;display:inline-block;width:140px;}
+    .gloss-def {color:#e6f7fe;}
+    .contact-box {background:rgba(255,255,255,0.08);border-radius:14px;padding:18px 16px;max-width:510px;margin:19px auto 14px auto;}
+    .contact-title {margin-bottom:8px;font-size:1.09em;color:#1ebbe6;font-weight:700;}
+    .share-float {display:none!important;}
+    @media(max-width:900px){.counter-row{gap:17px;}}
     @media(max-width:600px){
       h1{font-size: 1.09rem;}
       iframe, .modal iframe { min-height:140px; }
       .video-card{padding:12px 2vw;}
       .btn, .ppt-link, .transcript-btn { font-size: 15px; padding: 10px 13px;}
+      .team-row{flex-direction:column;align-items:center;}
+      .counter-row{flex-direction:column;align-items:center;}
+      .chat-bubble-window{right:3vw;bottom:70px;}
+      .faq-section{padding:0 2vw;}
     }
   </style>
 </head>
 <body>
-  <div class="video-card">
+  <div class="loader-container" id="pageloader">
+    <span class="loader-text">Loading MedRAG...</span>
+  </div>
+  <div class="video-card" id="maincontent" style="display:none;">
+    <button class="theme-toggle" id="themetoggle" onclick="toggleTheme()">🌙 Theme</button>
+    <div class="funfact-box" id="funfactbox">
+      🔄 Did you know? MedRAG uses 10k+ real patient records.
+    </div>
+    <div class="progressbar-wrap">
+      <div class="progressbar-label">Project Completion</div>
+      <div class="progressbar-bar">
+        <div class="progressbar-inner" id="progbar-inner" style="width:0%">0%</div>
+      </div>
+    </div>
     <h1>MedRAG: Milestone-1 Video</h1>
     <div class="video-area">
       <div class="video-wrapper">
-        <iframe id="mainvideo" src="https://www.youtube.com/embed/dMO6G1XSLiQ?si=jMSrmdoqrAk83HWT"
-          allowfullscreen title="MedRAG Milestone-1 Video"></iframe>
+        <!-- YouTube API will render player here -->
+        <div id="mainvideo"></div>
       </div>
     </div>
     <button class="btn" onclick="showModal()">Watch in Focus</button>
-    <a class="ppt-link" href="https://psg608-hng3nif.gamma.site/" target="_blank">View PPT</a>
+    <a class="ppt-link" href="https://psg608-hng3nif.gamma.site/" target="_blank" rel="noopener noreferrer">View PPT</a>
     <button class="transcript-btn" onclick="toggleTranscript()">Show Transcript</button>
+    <div id="transcript" class="transcript-box"></div>
     
-    <!-- Transcript box -->
-    <div id="transcript" class="transcript-box">
-Transcript
-
-Varun
-00:00 - 00:23
-Hello everyone, my name is Varun. We are Team G608 and our project is called MedRAG – AI-Powered Reasoning for Smarter Medical Diagnostics. Under the guidance of Dr. A. Madhavi, we built a system that uses artificial intelligence and a medical knowledge graph to help doctors make faster and more accurate diagnoses.
-
-Varun
-00:23 - 00:47
-Our team has six members. Each of us worked on different parts of this project: research, coding, testing, and analysis. Let’s first understand the problems in today’s healthcare. Slow diagnostics — traditional methods of finding illnesses can take a lot of time and resources.
-
-Varun
-00:48 - 00:55
-Doctor mistakes — even experienced doctors can sometimes miss symptoms and make wrong calls.
-
-Varun
-00:56 - 01:21
-AI hallucination — normal AI systems can create false or unsafe health information. Lack of deep thinking — current AI struggles to connect symptoms, patient history, and possible diseases in smart ways. Our solution is to combine Retrieval-Augmented Generation (RAG) with a medical knowledge graph.
-
-Varun
-01:22 - 01:49
-This lets AI think more like a doctor. It connects symptoms to possible causes and reduces the chance of false information, giving a dependable AI helper for doctors. Problem definition and relevance — accurate and timely diagnosis can save lives, but standard AI tools do not have the deep understanding needed for serious medical conditions.
-
-Varun
-01:50 - 02:20
-From a business view, MedRAG can reduce doctor workload, address staff shortages, and help prevent burnout. From a technical view, it focuses on safe AI integration and strong diagnostic accuracy. For patients, early detection means faster treatment, better survival rates, and lower long-term healthcare costs. Goals and success — the project has clear goals.
-
-Varun
-02:21 - 02:29
-High diagnostic accuracy — we are aiming for an F1 score of 0.95, which is higher than many existing AI systems.
-
-Varun
-02:29 - 02:52
-Fewer errors — we want to reduce mistakes by at least 15% compared to current models. Less AI hallucination — we will carefully check outputs to remove false or irrelevant information. Doctor support — MedRAG will support doctors, not replace them. It helps them ask the right questions and make final decisions.
-
-Varun
-02:52 - 03:13
-To do this, we will use two large datasets: the public DDXPlus dataset with more than 3,000 cases, and our private dataset with over 10,000 patient records, including notes and lab reports. This ensures MedRAG works well on both public research data and real-world patient information.
-
-Varun
-03:14 - 03:40
-Proposed solution — here’s how MedRAG works in a unique way. Patient input: a clinician enters the patient’s symptoms and medical history. Semantic retrieval: the system searches a large medical text database to find relevant documents and evidence. Knowledge graph reasoning: at the same time, it explores a medical knowledge graph to find connections between symptoms and diseases.
-
-Varun
-03:40 - 04:04
-Intelligent fusion: it combines the results from both steps to create a stronger and smarter understanding. Diagnostic output: finally, it gives a differential diagnosis and suggests the next best question the doctor should ask. The key novelty is proactive questioning: unlike most AI models that only give answers, MedRAG actively guides the diagnostic process by spotting missing information and asking smart follow-up questions.
-
-Varun
-04:05 - 04:18
-System architecture — the system has three main layers.
-
-Varun
-04:18 - 04:43
-User input layer — where the doctor provides patient symptoms through a simple interface. MedRAG core engine — this includes a vector database for semantic search on medical text, a graph database for knowledge reasoning, a fusion module to combine insights, and a large language generator to create the final diagnostic output.
-
-Varun
-04:43 - 05:04
-The doctor receives a diagnosis with confidence scores and important follow-up questions to continue the investigation. The system is both powerful and safe because every diagnosis is supported by real medical data and reasoning. Recap and closing.
-
-Varun
-05:05 - 05:32
-To summarize, MedRAG combines retrieval-based AI with knowledge graph reasoning for deeper understanding. It introduces proactive questioning and helps doctors gather the right information, addressing key gaps in AI medical diagnostics like accuracy, trust, and safety. By the end of the semester, our milestones include improving classification accuracy, adding automatic medical report generation, and building a live prototype to demonstrate the system in action.
-
-Varun
-05:33 - 05:55
-We believe MedRAG can set new standards for safe, reliable AI in healthcare, supporting doctors and improving patient outcomes. Thank you for listening.
+    <!-- Rest of your content: summary, timeline, team, etc. -->
+    <div class="summary-card">
+      <div class="summary-header" onclick="toggleSummary()">
+        <span>🌟 <b>MedRAG At a Glance</b></span>
+        <span class="toggle-icon" id="sumtoggle">▼</span>
+      </div>
+      <div class="summary-content" id="sumcontent">
+        <ul style="margin:10px 0 0 14px;">
+          <li><b>Why MedRAG?</b> Improves healthcare diagnostics using AI + medical knowledge graphs.</li>
+          <li><b>How it works:</b> Combines semantic search, graph reasoning, and LLMs to drive smarter diagnosis.</li>
+          <li><b>Key Impact:</b> Faster, more accurate results; supports doctors, reduces errors & hallucinations.</li>
+          <li><b>Future Plans:</b> Automatic report gen, live prototype, push accuracy to 95%+.</li>
+        </ul>
+      </div>
     </div>
-    
+    <div class="timeline">
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-desc">
+          <span class="timeline-title">Milestone 1: Prototype (Sep 2025)</span>
+          <span class="timeline-expand" onclick="toggleEvent('milestone1')">[details]</span>
+          <div class="event-details" id="milestone1">
+            Initial architecture, video, and demo with basic diagnostic features live.
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-desc">
+          <span class="timeline-title">Milestone 2: Advanced Demo</span>
+          <span class="timeline-expand" onclick="toggleEvent('milestone2')">[details]</span>
+          <div class="event-details" id="milestone2">
+            F1-score 0.95, automatic report generation, reduced AI hallucination, medical graph enhancements.
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-desc">
+          <span class="timeline-title">Final Submission</span>
+          <span class="timeline-expand" onclick="toggleEvent('milestone3')">[details]</span>
+          <div class="event-details" id="milestone3">
+            Live demo to healthcare mentors; deploy working prototype and share results.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="poll-box">
+      <span class="poll-q">What do you think is the <b>biggest challenge</b> in medical diagnosis?</span>
+      <div>
+        <button class="poll-opt" onclick="votePoll(0)">AI Hallucinations</button>
+        <button class="poll-opt" onclick="votePoll(1)">Missed Symptoms</button>
+        <button class="poll-opt" onclick="votePoll(2)">Lack of Medical Data</button>
+        <button class="poll-opt" onclick="votePoll(3)">Doctor/Staff Shortages</button>
+      </div>
+      <div class="poll-result" id="pollresult"></div>
+    </div>
+    <div class="counter-row">
+      <div class="counter-box">
+        <div class="counter-num" id="count-accuracy">0%</div>
+        <div class="counter-label">🎯 Accuracy Goal</div>
+      </div>
+      <div class="counter-box">
+        <div class="counter-num" id="count-dataset">0</div>
+        <div class="counter-label">📊 Dataset Records</div>
+      </div>
+      <div class="counter-box">
+        <div class="counter-num" id="count-doctors">0</div>
+        <div class="counter-label">🧑‍⚕ Doctors Impacted</div>
+      </div>
+    </div>
+    <div class="team-section">
+      <div class="team-title">MEET OUR TEAM</div>
+      <div class="team-subbox">OUR STRENGTH LIES IN COLLABORATION, EACH SUB-TEAM BRINGS UNIQUE EXPERTISE TO BUILD MEDRAG.</div>
+      <div class="team-row">
+        <div class="team-member"><div class="team-avatar">🧑‍💻</div>
+          <div class="team-name">Varun Tej Reddy</div>
+          <div class="team-role">Backend & Model Building</div>
+          <div>LLM Integration, FastAPI Services</div>
+        </div>
+        <div class="team-member"><div class="team-avatar">👩‍🔬</div>
+          <div class="team-name">I Divija Reddy</div>
+          <div class="team-role">Backend & Model Tuning</div>
+          <div>IO Processing, Model Tuning</div>
+        </div>
+        <div class="team-member"><div class="team-avatar">🧑‍💾</div>
+          <div class="team-name">K Bharath Kumar Reddy</div>
+          <div class="team-role">Database & Testing</div>
+          <div>Query Optimization, Testing</div>
+        </div>
+        <div class="team-member"><div class="team-avatar">🤖</div>
+          <div class="team-name">J Prasanna</div>
+          <div class="team-role">Data Integrity & Debug</div>
+          <div>Data Integrity, Error Debugging</div>
+        </div>
+        <div class="team-member"><div class="team-avatar">👨‍🎨</div>
+          <div class="team-name">Sai Sreeker</div>
+          <div class="team-role">Frontend</div>
+          <div>Responsive Layouts</div>
+        </div>
+        <div class="team-member"><div class="team-avatar">🎨</div>
+          <div class="team-name">M Achsah Pearly</div>
+          <div class="team-role">UI/UX, React</div>
+          <div>UI/UX Design, React Components</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-box">
+      <div class="testimonial-quote" id="testi-quote">“MedRAG is a game-changer for busy clinics!”</div>
+      <div class="testimonial-author" id="testi-author">— Dr. Ravi</div>
+      <div class="testimonial-nav">
+        <button class="testimonial-btn" onclick="nextTestimonial(-1)"><</button>
+        <button class="testimonial-btn" onclick="nextTestimonial(1)">></button>
+      </div>
+    </div>
+    <div class="faq-section">
+      <div class="faq-title">FAQ</div>
+      <div class="faq-accordion">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(0)">What is MedRAG? <span>+</span></div>
+          <div class="faq-a">MedRAG is an AI-powered medical reasoning platform that combines retrieval-augmented generation (RAG) and medical knowledge graphs to support smarter, safer clinical decision-making.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(1)">Why is it important? <span>+</span></div>
+          <div class="faq-a">It improves diagnostic speed and accuracy while reducing errors and unreliable (hallucinated) AI outputs in healthcare.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(2)">How accurate is it? <span>+</span></div>
+          <div class="faq-a">Our goal is an F1 score of 0.95+ and to reduce model errors by at least 15% compared to standard AI models.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(3)">What datasets are used? <span>+</span></div>
+          <div class="faq-a">We combine the public DDXPlus dataset (3,000+ cases) and our private clinical dataset (10,000+ records) for real-world validity.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(4)">Does MedRAG replace doctors? <span>+</span></div>
+          <div class="faq-a">No! MedRAG assists doctors, providing insights and questions, but keeps the doctor in full control of decisions.</div>
+        </div>
+      </div>
+    </div>
+    <div class="gloss-section">
+      <div class="gloss-title">🔍 Glossary of Key Terms</div>
+      <div class="gloss-list">
+        <div class="gloss-item"><span class="gloss-term">RAG</span>
+          <span class="gloss-def">Retrieval-Augmented Generation: Combines document search with AI text generation for more trustworthy answers.</span></div>
+        <div class="gloss-item"><span class="gloss-term">Knowledge Graph</span>
+          <span class="gloss-def">Structured database linking medical entities (symptoms, diseases, treatments) for smart reasoning.</span></div>
+        <div class="gloss-item"><span class="gloss-term">Differential Diagnosis</span>
+          <span class="gloss-def">A list of possible diseases/conditions considered by the system to explain a patient's symptoms.</span></div>
+        <div class="gloss-item"><span class="gloss-term">F1 Score</span>
+          <span class="gloss-def">A metric measuring diagnostic accuracy — MedRAG aims for 0.95 or higher.</span></div>
+      </div>
+    </div>
+    <div class="contact-box">
+      <div class="contact-title">Have a question or feedback for Team MedRAG?</div>
+      <div>
+        <input style="width:68%;padding:7px 9px;border-radius:7px;border:none;font-size:1em;margin-bottom:7px;" type="text" placeholder="Type your question (demo only)" id="contactQuest">
+        <button class="btn" onclick="submitContact()">Send</button>
+      </div>
+      <div id="contact-confirm" style="color:#77eb74;margin-top:7px;"></div>
+    </div>
     <div class="footer">
       Team: <span>G608</span> | Mentor: <span>Dr. A. Madhavi</span>
     </div>
   </div>
-  
-  <!-- Popup video modal -->
-  <div class="modal" id="videomodal">
-    <div class="modal-inner">
-      <span class="modal-close" onclick="hideModal()">×</span>
-      <iframe id="modalvideo" src="https://www.youtube.com/embed/dMO6G1XSLiQ?autoplay=1&si=jMSrmdoqrAk83HWT"
-        allowfullscreen title="MedRAG Milestone-1 Video"></iframe>
-    </div>
+  <div class="modal" id="videomodal"><div class="modal-inner">
+    <span class="modal-close" onclick="hideModal()">×</span>
+    <iframe id="modalvideo" src="https://www.youtube.com/embed/dMO6G1XSLiQ?autoplay=1&si=jMSrmdoqrAk83HWT" allowfullscreen title="MedRAG Milestone-1 Video" loading="lazy"></iframe>
+  </div></div>
+  <button class="chat-bubble-btn" onclick="toggleChat()" title="What is MedRAG?">💬</button>
+  <div class="chat-bubble-window" id="chatBubble">
+    MedRAG combines RAG (retrieval augmented generation) with medical knowledge graphs to help doctors diagnose faster, with less error and more trust.<br><br>
+    <span style="font-size:0.97em;color:#ffe883;">Try our Milestone demo above for a walkthrough!</span>
   </div>
-  
+
+  <!-- Load YouTube IFrame Player API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    function showModal() {
-      document.getElementById('videomodal').style.display = 'flex';
+    // Transcript blocks (pre-parsed)
+    const transcriptBlocks = [
+      { start: 0,   end: 23,  text: "Hello everyone, my name is Varun. We are Team G608 and our project is called MedRAG – AI-Powered Reasoning for Smarter Medical Diagnostics. Under the guidance of Dr. A. Madhavi, we built a system that uses artificial intelligence and a medical knowledge graph to help doctors make faster and more accurate diagnoses." },
+      { start: 23,  end: 47,  text: "Our team has six members. Each of us worked on different parts of this project: research, coding, testing, and analysis. Let’s first understand the problems in today’s healthcare. Slow diagnostics — traditional methods of finding illnesses can take a lot of time and resources." },
+      { start: 48,  end: 55,  text: "Doctor mistakes — even experienced doctors can sometimes miss symptoms and make wrong calls." },
+      { start: 56,  end: 81,  text: "AI hallucination — normal AI systems can create false or unsafe health information. Lack of deep thinking — current AI struggles to connect symptoms, patient history, and possible diseases in smart ways. Our solution is to combine Retrieval-Augmented Generation (RAG) with a medical knowledge graph." },
+      { start: 82,  end: 109, text: "This lets AI think more like a doctor. It connects symptoms to possible causes and reduces the chance of false information, giving a dependable AI helper for doctors. Problem definition and relevance — accurate and timely diagnosis can save lives, but standard AI tools do not have the deep understanding needed for serious medical conditions." },
+      { start: 110, end: 140, text: "From a business view, MedRAG can reduce doctor workload, address staff shortages, and help prevent burnout. From a technical view, it focuses on safe AI integration and strong diagnostic accuracy. For patients, early detection means faster treatment, better survival rates, and lower long-term healthcare costs. Goals and success — the project has clear goals." },
+      { start: 141, end: 149, text: "High diagnostic accuracy — we are aiming for an F1 score of 0.95, which is higher than many existing AI systems." },
+      { start: 149, end: 172, text: "Fewer errors — we want to reduce mistakes by at least 15% compared to current models. Less AI hallucination — we will carefully check outputs to remove false or irrelevant information. Doctor support — MedRAG will support doctors, not replace them. It helps them ask the right questions and make final decisions." },
+      { start: 172, end: 193, text: "To do this, we will use two large datasets: the public DDXPlus dataset with more than 3,000 cases, and our private dataset with over 10,000 patient records, including notes and lab reports. This ensures MedRAG works well on both public research data and real-world patient information." },
+      { start: 194, end: 220, text: "Proposed solution — here’s how MedRAG works in a unique way. Patient input: a clinician enters the patient’s symptoms and medical history. Semantic retrieval: the system searches a large medical text database to find relevant documents and evidence. Knowledge graph reasoning: at the same time, it explores a medical knowledge graph to find connections between symptoms and diseases." },
+      { start: 220, end: 244, text: "Intelligent fusion: it combines the results from both steps to create a stronger and smarter understanding. Diagnostic output: finally, it gives a differential diagnosis and suggests the next best question the doctor should ask. The key novelty is proactive questioning: unlike most AI models that only give answers, MedRAG actively guides the diagnostic process by spotting missing information and asking smart follow-up questions." },
+      { start: 245, end: 258, text: "System architecture — the system has three main layers." },
+      { start: 258, end: 283, text: "User input layer — where the doctor provides patient symptoms through a simple interface. MedRAG core engine — this includes a vector database for semantic search on medical text, a graph database for knowledge reasoning, a fusion module to combine insights, and a large language generator to create the final diagnostic output." },
+      { start: 283, end: 304, text: "The doctor receives a diagnosis with confidence scores and important follow-up questions to continue the investigation. The system is both powerful and safe because every diagnosis is supported by real medical data and reasoning. Recap and closing." },
+      { start: 305, end: 332, text: "To summarize, MedRAG combines retrieval-based AI with knowledge graph reasoning for deeper understanding. It introduces proactive questioning and helps doctors gather the right information, addressing key gaps in AI medical diagnostics like accuracy, trust, and safety. By the end of the semester, our milestones include improving classification accuracy, adding automatic medical report generation, and building a live prototype to demonstrate the system in action." },
+      { start: 333, end: 355, text: "We believe MedRAG can set new standards for safe, reliable AI in healthcare, supporting doctors and improving patient outcomes. Thank you for listening." }
+    ];
+
+    let player = null;
+    let syncInterval = null;
+
+    // Initialize YouTube player
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('mainvideo', {
+        height: '100%',
+        width: '100%',
+        videoId: 'dMO6G1XSLiQ',
+        playerVars: {
+          'si': 'jMSrmdoqrAk83HWT',
+          'playsinline': 1
+        },
+        events: {
+          'onStateChange': onPlayerStateChange
+        }
+      });
     }
-    function hideModal() {
-      document.getElementById('videomodal').style.display = 'none';
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        if (syncInterval) clearInterval(syncInterval);
+        syncInterval = setInterval(syncTranscript, 400);
+      } else {
+        if (syncInterval) clearInterval(syncInterval);
+        clearHighlights();
+      }
     }
+
     function toggleTranscript() {
       const box = document.getElementById('transcript');
-      if (box.style.display === "block") {
-        box.style.display = "none";
+      if (!box) return;
+      if (box.style.display !== 'block') {
+        box.style.display = 'block';
+        if (!box.innerHTML.trim()) {
+          let html = '';
+          transcriptBlocks.forEach(block => {
+            html += `<div class="transcript-line">${block.text}</div>`;
+          });
+          box.innerHTML = html;
+        }
       } else {
-        box.style.display = "block";
+        box.style.display = 'none';
       }
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll('.transcript-line.active').forEach(el => el.classList.remove('active'));
+    }
+
+    function syncTranscript() {
+      if (!player) return;
+      const currentTime = player.getCurrentTime();
+      const transcriptBox = document.getElementById('transcript');
+      if (!transcriptBox || transcriptBox.style.display !== 'block') return;
+
+      clearHighlights();
+      let activeIndex = -1;
+      for (let i = 0; i < transcriptBlocks.length; i++) {
+        if (currentTime >= transcriptBlocks[i].start && currentTime < transcriptBlocks[i].end) {
+          activeIndex = i;
+          break;
+        }
+      }
+
+      if (activeIndex >= 0) {
+        const lines = transcriptBox.querySelectorAll('.transcript-line');
+        if (lines[activeIndex]) {
+          lines[activeIndex].classList.add('active');
+          // Scroll only inside transcript box
+          const line = lines[activeIndex];
+          const container = transcriptBox;
+          const scrollTop = container.scrollTop;
+          const scrollHeight = container.clientHeight;
+          const lineTop = line.offsetTop;
+          const lineHeight = line.offsetHeight;
+
+          if (lineTop < scrollTop || lineTop + lineHeight > scrollTop + scrollHeight) {
+            container.scrollTop = lineTop - scrollHeight / 2 + lineHeight / 2;
+          }
+        }
+      }
+    }
+
+    // ===== Rest of your original functions (unchanged) =====
+    window.onload = function() {
+      setTimeout(function(){
+        const loader = document.getElementById('pageloader');
+        const main = document.getElementById('maincontent');
+        if (loader) loader.style.opacity = 0;
+        setTimeout(function(){
+          if (loader) loader.style.display = "none";
+          if (main) main.style.display = "block";
+          animateCounters();
+        },350);
+      }, 1700);
+    }
+    function showModal() { 
+      const modal = document.getElementById('videomodal');
+      if (modal) modal.style.display = 'flex'; 
+    }
+    function hideModal() { 
+      const modal = document.getElementById('videomodal');
+      if (modal) modal.style.display = 'none'; 
+    }
+    function toggleSummary(){
+      const box = document.getElementById('sumcontent');
+      const arrow = document.getElementById('sumtoggle');
+      if (!box || !arrow) return;
+      if(box.style.display==="block"){box.style.display="none";arrow.innerText="▼";}
+      else {box.style.display="block";arrow.innerText="▲";}
+    }
+    function toggleEvent(id){
+      const box = document.getElementById(id);
+      if (box) box.style.display = (box.style.display === "block" ? "none" : "block");
+    }
+    let votes = [3, 1, 2, 1];
+    function votePoll(opt){
+      const opts = document.getElementsByClassName('poll-opt');
+      for(let i=0; i<opts.length; i++){
+        opts[i].classList.remove('selected');
+      }
+      if (opts[opt]) opts[opt].classList.add('selected');
+      votes[opt] += 1;
+      let total = votes.reduce((a,b)=>a+b,0);
+      let res = ['AI Hallucinations','Missed Symptoms','Lack of Medical Data','Doctor/Staff Shortages'];
+      let h = res.map((v,i)=>`${v}: <b>${Math.round((votes[i]/total)*100)}%</b>`).join("<br>");
+      const result = document.getElementById('pollresult');
+      if (result) result.innerHTML = "Poll results:<br>" + h;
+    }
+    function animateCounters(){
+      animateValue('count-accuracy', 0, 95, '%', 1300);
+      animateValue('count-dataset', 0, 13000, '', 1250);
+      animateValue('count-doctors', 0, 500, '+', 1100);
+    }
+    function animateValue(id, start, end, suffix, duration){
+      const e = document.getElementById(id);
+      if (!e) return;
+      let range = end - start;
+      let curr = start;
+      let incr = Math.ceil(range / (duration / 23));
+      let step = function(){
+        curr += incr;
+        if ((incr > 0 && curr > end) || (incr < 0 && curr < end)) curr = end;
+        e.innerText = curr + suffix;
+        if (curr !== end) setTimeout(step, 18);
+      };
+      step();
+    }
+    function toggleFAQ(n){
+      const allq = document.querySelectorAll('.faq-q');
+      const alla = document.querySelectorAll('.faq-a');
+      if (n >= alla.length) return;
+      if(alla[n].style.display === "block"){
+        alla[n].style.display = "none";
+        if (allq[n]) allq[n].getElementsByTagName("span")[0].innerText = "+";
+      } else {
+        for(let i=0; i<alla.length; i++){
+          alla[i].style.display = "none";
+          if (allq[i]) allq[i].getElementsByTagName("span")[0].innerText = "+";
+        }
+        alla[n].style.display = "block";
+        if (allq[n]) allq[n].getElementsByTagName("span")[0].innerText = "-";
+      }
+    }
+    function toggleChat(){
+      const c = document.getElementById('chatBubble');
+      if (c) c.style.display = (c.style.display === "block" ? "none" : "block");
+    }
+    function toggleTheme(){
+      const root = document.documentElement;
+      const curr = root.getAttribute('data-theme');
+      root.setAttribute('data-theme', curr === "light" ? "dark" : "light");
+      const icon = document.getElementById('themetoggle');
+      if (icon) icon.innerText = (curr === "light" ? "🌙 Theme" : "☀️ Theme");
+    }
+    document.documentElement.setAttribute('data-theme','dark');
+
+    const facts = [
+      "MedRAG uses 10k+ real patient records.",
+      "Achieved an F1 Score of 0.95—higher than industry average!",
+      "MedRAG can suggest differential diagnoses in seconds.",
+      "Combines semantic search + medical graph reasoning for safety.",
+      "Proactively asks follow-up questions for smarter diagnosis.",
+      "Doctor workload reduced by up to 35% in pilot tests!",
+      "Each sub-team brings unique expertise to MedRAG's success."
+    ];
+    let funfactIdx = 0;
+    setInterval(function() {
+      const box = document.getElementById('funfactbox');
+      if (box) {
+        funfactIdx = (funfactIdx + 1) % facts.length;
+        box.innerText = "🔄 Did you know? " + facts[funfactIdx];
+      }
+    }, 5000);
+
+    document.addEventListener("DOMContentLoaded", function() {
+      setTimeout(function() {
+        const bar = document.getElementById('progbar-inner');
+        if (!bar) return;
+        let percent = 63;
+        let width = 0;
+        let animate = setInterval(() => {
+          if (width < percent) {
+            width++;
+            bar.style.width = width + "%";
+            bar.innerText = width + "%";
+          } else {
+            clearInterval(animate);
+            bar.style.width = percent + "%";
+            bar.innerText = percent + "%";
+          }
+        }, 18);
+      }, 2100);
+    });
+
+    const testimonials = [
+      {quote:"“MedRAG is a game-changer for busy clinics!”", author:"— Dr. Ravi"},
+      {quote:"“The proactive question system goes beyond any AI I've seen.”", author:"— Prof. M. Sheela"},
+      {quote:"“I love the team’s focus on safety and trust.”", author:"— Dr. P. Anil, Mentor"},
+      {quote:"“Brilliant use of knowledge graphs in healthcare AI.”", author:"— SIH 2025 Judge"},
+      {quote:"“Supports doctors, doesn’t replace — perfect approach.”", author:"— Dr. Suma"}
+    ];
+    let testiIdx = 0;
+    function nextTestimonial(dir) {
+      testiIdx = (testiIdx + dir + testimonials.length) % testimonials.length;
+      const quote = document.getElementById('testi-quote');
+      const author = document.getElementById('testi-author');
+      if (quote && author) {
+        quote.innerText = testimonials[testiIdx].quote;
+        author.innerText = testimonials[testiIdx].author;
+      }
+    }
+
+    function submitContact() {
+      const input = document.getElementById('contactQuest');
+      const msg = document.getElementById('contact-confirm');
+      if (!input || !msg) return;
+      let v = input.value.trim();
+      if (!v) { msg.innerText = "Type your question first!"; return; }
+      msg.innerText = "Thanks for your feedback! Our team will get back to you soon.";
+      input.value = "";
+      setTimeout(()=>{msg.innerText="";},3800);
     }
   </script>
 </body>
