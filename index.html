@@ -22,7 +22,7 @@
     .video-area { margin: 0 auto 16px auto; width: 100%; display: flex; justify-content: center; }
     .video-wrapper { position: relative; width: 95%; max-width: 620px; }
     iframe { width: 100%; min-height: 370px; border-radius: 18px; border: none; }
-    .btn, .ppt-link {
+    .btn, .ppt-link, .transcript-btn {
       background: #7d5afe;
       color: #fff; 
       border: none; 
@@ -38,13 +38,30 @@
       display: inline-block;
       text-decoration: none;
     }
-    .btn:hover, .ppt-link:hover { background: #1ebbe6; transform: scale(1.04); }
+    .btn:hover, .ppt-link:hover, .transcript-btn:hover { background: #1ebbe6; transform: scale(1.04); }
     .ppt-link::before {
       content: "📑 ";
       font-size: 1.14em;
       vertical-align: middle;
     }
     .footer { margin-top: 20px; color: #f8e377; font-size: 15px; }
+    
+    /* Transcript area */
+    .transcript-box {
+      display: none;
+      text-align: left;
+      margin-top: 20px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 16px;
+      color: #e6f0ff;
+      font-size: 15px;
+      line-height: 1.6;
+      max-height: 340px;
+      overflow-y: auto;
+      white-space: pre-line;
+    }
+    
     /* Modal overlay for popup video */
     .modal { display:none; position: fixed; z-index:24; left:0;top:0; width:100vw;height:100vh;
       background:rgba(24,29,44,0.85);align-items:center;justify-content:center;}
@@ -56,7 +73,7 @@
       h1{font-size: 1.09rem;}
       iframe, .modal iframe { min-height:140px; }
       .video-card{padding:12px 2vw;}
-      .btn, .ppt-link { font-size: 15px; padding: 10px 13px;}
+      .btn, .ppt-link, .transcript-btn { font-size: 15px; padding: 10px 13px;}
     }
   </style>
 </head>
@@ -71,10 +88,82 @@
     </div>
     <button class="btn" onclick="showModal()">Watch in Focus</button>
     <a class="ppt-link" href="https://psg608-hng3nif.gamma.site/" target="_blank">View PPT</a>
+    <button class="transcript-btn" onclick="toggleTranscript()">Show Transcript</button>
+    
+    <!-- Transcript box -->
+    <div id="transcript" class="transcript-box">
+Transcript
+
+Varun
+00:00 - 00:23
+Hello everyone, my name is Varun. We are Team G608 and our project is called MedRAG – AI-Powered Reasoning for Smarter Medical Diagnostics. Under the guidance of Dr. A. Madhavi, we built a system that uses artificial intelligence and a medical knowledge graph to help doctors make faster and more accurate diagnoses.
+
+Varun
+00:23 - 00:47
+Our team has six members. Each of us worked on different parts of this project: research, coding, testing, and analysis. Let’s first understand the problems in today’s healthcare. Slow diagnostics — traditional methods of finding illnesses can take a lot of time and resources.
+
+Varun
+00:48 - 00:55
+Doctor mistakes — even experienced doctors can sometimes miss symptoms and make wrong calls.
+
+Varun
+00:56 - 01:21
+AI hallucination — normal AI systems can create false or unsafe health information. Lack of deep thinking — current AI struggles to connect symptoms, patient history, and possible diseases in smart ways. Our solution is to combine Retrieval-Augmented Generation (RAG) with a medical knowledge graph.
+
+Varun
+01:22 - 01:49
+This lets AI think more like a doctor. It connects symptoms to possible causes and reduces the chance of false information, giving a dependable AI helper for doctors. Problem definition and relevance — accurate and timely diagnosis can save lives, but standard AI tools do not have the deep understanding needed for serious medical conditions.
+
+Varun
+01:50 - 02:20
+From a business view, MedRAG can reduce doctor workload, address staff shortages, and help prevent burnout. From a technical view, it focuses on safe AI integration and strong diagnostic accuracy. For patients, early detection means faster treatment, better survival rates, and lower long-term healthcare costs. Goals and success — the project has clear goals.
+
+Varun
+02:21 - 02:29
+High diagnostic accuracy — we are aiming for an F1 score of 0.95, which is higher than many existing AI systems.
+
+Varun
+02:29 - 02:52
+Fewer errors — we want to reduce mistakes by at least 15% compared to current models. Less AI hallucination — we will carefully check outputs to remove false or irrelevant information. Doctor support — MedRAG will support doctors, not replace them. It helps them ask the right questions and make final decisions.
+
+Varun
+02:52 - 03:13
+To do this, we will use two large datasets: the public DDXPlus dataset with more than 3,000 cases, and our private dataset with over 10,000 patient records, including notes and lab reports. This ensures MedRAG works well on both public research data and real-world patient information.
+
+Varun
+03:14 - 03:40
+Proposed solution — here’s how MedRAG works in a unique way. Patient input: a clinician enters the patient’s symptoms and medical history. Semantic retrieval: the system searches a large medical text database to find relevant documents and evidence. Knowledge graph reasoning: at the same time, it explores a medical knowledge graph to find connections between symptoms and diseases.
+
+Varun
+03:40 - 04:04
+Intelligent fusion: it combines the results from both steps to create a stronger and smarter understanding. Diagnostic output: finally, it gives a differential diagnosis and suggests the next best question the doctor should ask. The key novelty is proactive questioning: unlike most AI models that only give answers, MedRAG actively guides the diagnostic process by spotting missing information and asking smart follow-up questions.
+
+Varun
+04:05 - 04:18
+System architecture — the system has three main layers.
+
+Varun
+04:18 - 04:43
+User input layer — where the doctor provides patient symptoms through a simple interface. MedRAG core engine — this includes a vector database for semantic search on medical text, a graph database for knowledge reasoning, a fusion module to combine insights, and a large language generator to create the final diagnostic output.
+
+Varun
+04:43 - 05:04
+The doctor receives a diagnosis with confidence scores and important follow-up questions to continue the investigation. The system is both powerful and safe because every diagnosis is supported by real medical data and reasoning. Recap and closing.
+
+Varun
+05:05 - 05:32
+To summarize, MedRAG combines retrieval-based AI with knowledge graph reasoning for deeper understanding. It introduces proactive questioning and helps doctors gather the right information, addressing key gaps in AI medical diagnostics like accuracy, trust, and safety. By the end of the semester, our milestones include improving classification accuracy, adding automatic medical report generation, and building a live prototype to demonstrate the system in action.
+
+Varun
+05:33 - 05:55
+We believe MedRAG can set new standards for safe, reliable AI in healthcare, supporting doctors and improving patient outcomes. Thank you for listening.
+    </div>
+    
     <div class="footer">
       Team: <span>G608</span> | Mentor: <span>Dr. A. Madhavi</span>
     </div>
   </div>
+  
   <!-- Popup video modal -->
   <div class="modal" id="videomodal">
     <div class="modal-inner">
@@ -83,12 +172,21 @@
         allowfullscreen title="MedRAG Milestone-1 Video"></iframe>
     </div>
   </div>
+  
   <script>
     function showModal() {
       document.getElementById('videomodal').style.display = 'flex';
     }
     function hideModal() {
       document.getElementById('videomodal').style.display = 'none';
+    }
+    function toggleTranscript() {
+      const box = document.getElementById('transcript');
+      if (box.style.display === "block") {
+        box.style.display = "none";
+      } else {
+        box.style.display = "block";
+      }
     }
   </script>
 </body>
