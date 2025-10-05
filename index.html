@@ -918,13 +918,21 @@
     let player = null;
     let syncInterval = null;
     let isPlayerReady = false;
+    let apiLoaded = false;
 
     function onYouTubeIframeAPIReady() {
       console.log('YouTube API ready, creating player...');
+      apiLoaded = true;
       createPlayer();
     }
     
     function createPlayer() {
+      if (!apiLoaded || !window.YT || !YT.Player) {
+        console.log('API not ready, retrying...');
+        setTimeout(createPlayer, 500);
+        return;
+      }
+      
       if (player) {
         try {
           player.destroy();
@@ -1063,24 +1071,44 @@
     window.addEventListener('load', function() {
       loadTranscript();
       
+      // Initialize player after a short delay
+      setTimeout(() => {
+        if (window.YT && YT.Player) {
+          apiLoaded = true;
+          createPlayer();
+        } else {
+          // Wait for API to load
+          let checkCount = 0;
+          const checkAPI = setInterval(() => {
+            checkCount++;
+            if (window.YT && YT.Player) {
+              clearInterval(checkAPI);
+              apiLoaded = true;
+              createPlayer();
+            } else if (checkCount > 20) {
+              clearInterval(checkAPI);
+              console.log('API failed to load, using fallback');
+              createFallbackPlayer();
+            }
+          }, 250);
+        }
+      }, 100);
+      
       setTimeout(() => {
         document.getElementById('loader').style.opacity = '0';
         setTimeout(() => {
           document.getElementById('loader').classList.add('hidden');
         }, 500);
       }, 1500);
-      
-      // Fallback if API doesn't load
-      setTimeout(() => {
-        if (!isPlayerReady) {
-          console.log('Fallback: Creating iframe directly');
-          document.getElementById('mainvideo').innerHTML = 
-            '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/dMO6G1XSLiQ?enablejsapi=1&origin=' + window.location.origin + '" frameborder="0" allowfullscreen></iframe>';
-        }
-      }, 5000);
     });
     
-    // Force API reload if needed
+    function createFallbackPlayer() {
+      document.getElementById('mainvideo').innerHTML = 
+        '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/dMO6G1XSLiQ?enablejsapi=1&origin=' + window.location.origin + '" frameborder="0" allowfullscreen></iframe>';
+      loadTranscript();
+    }
+    
+    // Ensure API is loaded
     if (typeof YT === 'undefined' || !YT.Player) {
       const script = document.createElement('script');
       script.src = 'https://www.youtube.com/iframe_api';
