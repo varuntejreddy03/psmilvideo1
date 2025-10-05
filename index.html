@@ -262,59 +262,118 @@
         <div class="counter-label">🧑‍⚕ Doctors Impacted</div>
       </div>
     </div>
-    <div class="team-section">
-      <div class="team-title">MEET OUR TEAM</div>
-      <div class="team-subbox">OUR STRENGTH LIES IN COLLABORATION, EACH SUB-TEAM BRINGS UNIQUE EXPERTISE TO BUILD MEDRAG.</div>
-      <div class="team-row">
-        <div class="team-member"><div class="team-avatar">🧑‍💻</div>
-          <div class="team-name">Varun Tej Reddy</div>
-          <div class="team-role">Backend & Model Building</div>
-          <div>LLM Integration, FastAPI Services</div>
-        </div>
-        <div class="team-member"><div class="team-avatar">👩‍🔬</div>
-          <div class="team-name">I Divija Reddy</div>
-          <div class="team-role">Backend & Model Tuning</div>
-          <div>IO Processing, Model Tuning</div>
-        </div>
-        <div class="team-member"><div class="team-avatar">🧑‍💾</div>
-          <div class="team-name">K Bharath Kumar Reddy</div>
-          <div class="team-role">Database & Testing</div>
-          <div>Query Optimization, Testing</div>
-        </div>
-        <div class="team-member"><div class="team-avatar">🤖</div>
-          <div class="team-name">J Prasanna</div>
-          <div class="team-role">Data Integrity & Debug</div>
-          <div>Data Integrity, Error Debugging</div>
-        </div>
-        <div class="team-member"><div class="team-avatar">👨‍🎨</div>
-          <div class="team-name">Sai Sreeker</div>
-          <div class="team-role">Frontend</div>
-          <div>Responsive Layouts</div>
-        </div>
-        <div class="team-member"><div class="team-avatar">🎨</div>
-          <div class="team-name">M Achsah Pearly</div>
-          <div class="team-role">UI/UX, React</div>
-          <div>UI/UX Design, React Components</div>
-        </div>
+   <style>
+    /* ...Style as in your previous code... */
+    body { background: #112233; font-family: 'Poppins',sans-serif; color: #f6fbff; margin: 0; }
+    .team-section {
+      margin: 36px auto 18px auto; text-align: center;
+    }
+    .team-title {
+      font-size: 2em; font-weight: bold; margin-bottom: 11px; color: #f6fbff;
+    }
+    .team-subbox {
+      font-size: 1em; color: #9ed7f7; margin-bottom: 20px;
+    }
+    .team-row {
+      display: flex; flex-wrap: wrap; justify-content: center;
+    }
+    .team-member {
+      background: rgba(255,255,255,0.10); border-radius:15px; padding:15px 18px; margin:8px 12px; text-align:center; width:170px; transition:box-shadow 0.19s;
+    }
+    .team-member:hover{box-shadow:0 3px 22px #7d5afe72;}
+    .team-avatar { font-size:2.7em; cursor:pointer; transition:transform 0.16s;}
+    .team-avatar:hover {transform:scale(1.15);}
+    .team-role { font-weight:600; color:#1ebbe6; margin-top:7px;}
+    .team-name { font-size:1.01em; margin-bottom:3px; margin-top:8px; color:#f6fbff;}
+    /* Modal styling */
+    .modal {
+      display:none; position:fixed; z-index:101; left:0;top:0; width:100vw;height:100vh;
+      background:rgba(24,29,44,0.85);align-items:center;justify-content:center;
+    }
+    .modal-inner {
+      background:#191f39; border-radius:22px; padding:22px 14px 12px 14px; box-shadow:0 5px 41px #1ebbe677;
+      max-width:420px; width:95vw; position:relative;
+    }
+    .modal-close {
+      position:absolute;top:13px;right:19px; font-size:2em;color:#fff;cursor:pointer; font-weight:bold;
+    }
+    #teammateLabel {margin-top:8px;color:#1ebbe6;font-size:1.1em;font-weight:600;text-align:center;}
+  </style>
+  <div class="team-section">
+    <div class="team-title">MEET OUR TEAM</div>
+    <div class="team-subbox">OUR STRENGTH LIES IN COLLABORATION, EACH SUB-TEAM BRINGS UNIQUE EXPERTISE TO BUILD MEDRAG.</div>
+    <div class="team-row">
+      <div class="team-member">
+        <span class="team-avatar" onclick="showTeammateVideo('varun')" title="Watch Varun's Video">🧑‍💻</span>
+        <div class="team-name">Varun Tej Reddy</div>
+        <div class="team-role">Backend & Model Building</div>
+        <div>LLM Integration, FastAPI Services</div>
+      </div>
+      <div class="team-member">
+        <span class="team-avatar" onclick="showTeammateVideo('divija')" title="Watch Divija's Video">👩‍🔬</span>
+        <div class="team-name">I Divija Reddy</div>
+        <div class="team-role">Backend & Model Tuning</div>
+        <div>IO Processing, Model Tuning</div>
+      </div>
+      <div class="team-member">
+        <span class="team-avatar" onclick="showTeammateVideo('bharath')" title="Watch Bharath's Video">🧑‍💾</span>
+        <div class="team-name">K Bharath Kumar Reddy</div>
+        <div class="team-role">Database & Testing</div>
+        <div>Query Optimization, Testing</div>
+      </div>
+      <div class="team-member">
+        <span class="team-avatar" onclick="showTeammateVideo('prasanna')" title="Watch Prasanna's Video">🤖</span>
+        <div class="team-name">J Prasanna</div>
+        <div class="team-role">Data Integrity & Debug</div>
+        <div>Data Integrity, Error Debugging</div>
+      </div>
+      <div class="team-member">
+        <span class="team-avatar" onclick="showTeammateVideo('sreeker')" title="Watch Sreeker's Video">👨‍🎨</span>
+        <div class="team-name">Sai Sreeker</div>
+        <div class="team-role">Frontend</div>
+        <div>Responsive Layouts</div>
+      </div>
+      <div class="team-member">
+        <span class="team-avatar" onclick="showTeammateVideo('achsah')" title="Watch Achsah's Video">🎨</span>
+        <div class="team-name">M Achsah Pearly</div>
+        <div class="team-role">UI/UX, React</div>
+        <div>UI/UX Design, React Components</div>
       </div>
     </div>
-    <div class="teammate-videos">
-      <h2>🎦 Teammates Milestone Videos</h2>
-      <button class="btn" onclick="window.open('https://youtu.be/kTtknMiwobY?si=yXGX4JQxS5gpMz1M','_blank')">
-        Sai Sreeker Video
-      </button>
-      <button class="btn" onclick="window.open('https://youtu.be/TTB3A8BSTyE?si=dIsEndV9ixm362s9','_blank')">
-        M Achsah Pearly Video
-      </button>
-      <button class="btn" onclick="window.open('https://www.youtube.com/watch?v=D2oXqJaMgrA','_blank')">
-        K Bharath Kumar Reddy Video
-      </button>
-      <button class="btn" onclick="window.open('https://youtu.be/rtRbMppsDAQ?si=uEciYZ8dxPffI5G8','_blank')">
-        I Divija Reddy Video
-      </button>
-      <!-- <button class="btn">J Prasanna Video (add link later)</button> -->
-      <p style="color: var(--text-yel); font-size: 0.98em; margin-top: 17px;">J Prasanna’s video will be added soon!</p>
+  </div>
+
+  <!-- Modal for embedded team videos -->
+  <div class="modal" id="teammateVideoModal">
+    <div class="modal-inner">
+      <span class="modal-close" onclick="hideTeammateVideo()">×</span>
+      <iframe id="teammateIframe" width="100%" height="320" style="border-radius:13px;" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen title="Teammate Milestone Video"></iframe>
+      <div id="teammateLabel"></div>
     </div>
+  </div>
+
+  <!-- VIDEO JS -->
+  <script>
+    const teammateVideos = {
+      sreeker:  { url: 'https://www.youtube.com/embed/kTtknMiwobY?si=yXGX4JQxS5gpMz1M', label: 'Sai Sreeker Video' },
+      achsah:   { url: 'https://www.youtube.com/embed/TTB3A8BSTyE?si=dIsEndV9ixm362s9', label: 'M Achsah Pearly Video' },
+      bharath:  { url: 'https://www.youtube.com/embed/D2oXqJaMgrA', label: 'K Bharath Kumar Reddy Video' },
+      divija:   { url: 'https://www.youtube.com/embed/rtRbMppsDAQ?si=uEciYZ8dxPffI5G8', label: 'I Divija Reddy Video' },
+      prasanna: { url: 'https://www.youtube.com/embed/jEPR2EAEC_8?si=JwX2L7DKeFBD7czA', label: 'J Prasanna Video' },
+      varun:    { url: 'https://www.youtube.com/embed/dMO6G1XSLiQ?si=jMSrmdoqrAk83HWT', label: 'Varun Tej Reddy Video' }
+    };
+    function showTeammateVideo(key) {
+      if (!teammateVideos[key]) return;
+      document.getElementById('teammateIframe').src = teammateVideos[key].url;
+      document.getElementById('teammateLabel').innerText = teammateVideos[key].label;
+      document.getElementById('teammateVideoModal').style.display = 'flex';
+    }
+    function hideTeammateVideo() {
+      document.getElementById('teammateVideoModal').style.display = 'none';
+      document.getElementById('teammateIframe').src = '';
+    }
+  </script>
     <div class="testimonial-box">
       <div class="testimonial-quote" id="testi-quote">“MedRAG is a game-changer for busy clinics!”</div>
       <div class="testimonial-author" id="testi-author">— Dr. Ravi</div>
@@ -653,6 +712,7 @@
   </script>
 </body>
 </html>
+
 
 
 
