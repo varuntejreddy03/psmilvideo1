@@ -449,13 +449,6 @@
     }
     
     @media (max-width: 768px) {
-      body {
-        overflow: hidden;
-        height: 100vh;
-        position: fixed;
-        width: 100%;
-      }
-      
       .container {
         padding: 0 10px;
       }
@@ -1584,21 +1577,13 @@
       document.getElementById('scrollProgress').style.width = scrollPercent + '%';
     });
     
-    // Prevent page scrolling on mobile
+    // Mobile transcript scrolling
     document.addEventListener('DOMContentLoaded', function() {
-      if (window.innerWidth <= 768) {
-        document.body.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
-        document.body.style.height = '100vh';
-        
-        // Allow only transcript scrolling
-        const transcriptContent = document.getElementById('transcript');
-        if (transcriptContent) {
-          transcriptContent.addEventListener('touchmove', function(e) {
-            e.stopPropagation();
-          }, { passive: true });
-        }
+      const transcriptContent = document.getElementById('transcript');
+      if (transcriptContent) {
+        transcriptContent.addEventListener('touchmove', function(e) {
+          e.stopPropagation();
+        }, { passive: true });
       }
     });
   </script>
