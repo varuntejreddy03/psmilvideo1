@@ -449,6 +449,13 @@
     }
     
     @media (max-width: 768px) {
+      body {
+        overflow: hidden;
+        height: 100vh;
+        position: fixed;
+        width: 100%;
+      }
+      
       .container {
         padding: 0 10px;
       }
@@ -881,6 +888,8 @@
       color: var(--text-light);
       font-size: 15px;
       line-height: 1.7;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
     }
     
     /* Team Videos Section */
@@ -1435,7 +1444,11 @@
           const lines = transcriptBox.querySelectorAll('.transcript-line');
           if (lines[i]) {
             lines[i].classList.add('active');
-            lines[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const lineRect = lines[i].getBoundingClientRect();
+            const containerRect = transcriptBox.getBoundingClientRect();
+            const scrollTop = transcriptBox.scrollTop;
+            const targetScroll = scrollTop + lineRect.top - containerRect.top - (containerRect.height / 2) + (lineRect.height / 2);
+            transcriptBox.scrollTo({ top: targetScroll, behavior: 'smooth' });
           }
           break;
         }
@@ -1569,6 +1582,24 @@
       const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrollPercent = (scrollTop / scrollHeight) * 100;
       document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+    });
+    
+    // Prevent page scrolling on mobile
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.innerWidth <= 768) {
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+        document.body.style.height = '100vh';
+        
+        // Allow only transcript scrolling
+        const transcriptContent = document.getElementById('transcript');
+        if (transcriptContent) {
+          transcriptContent.addEventListener('touchmove', function(e) {
+            e.stopPropagation();
+          }, { passive: true });
+        }
+      }
     });
   </script>
 </body>
